@@ -48,7 +48,7 @@ exports.registerUser = async (req, res) => {
 
     try {
 
-        const verifyExistingEmail = await JobSeeker.findOne({ email: email })
+        const verifyExistingEmail = await UserModel.findOne({ email: email })
 
         if (verifyExistingEmail) {
             return res.status(400).json({ message: 'email already exist!' });

@@ -2,8 +2,9 @@ const express = require("express");
 const cors = require('cors')
 const cookieParser = require('cookie-parser');
 const connectDb = require('./config/db');
-const { getAllUsers, registerUser, loginUser } = require("./controllers/userController");
+const userCotroller = require("./controllers/userController");
 const authenticateToken = require("./middleware/authToken");
+const todoController = require("./controllers/todoController");
 
 const app = express(express.json);
 app.use(express.json())
@@ -16,11 +17,17 @@ app.get('/', (req, res) => {
     res.json({ message: 'This is my express app' });
 })
 
-app.get('/getUsers', authenticateToken, getAllUsers)
+app.get('/getUsers', authenticateToken, userCotroller.getAllUsers)
 
-app.post('/register', registerUser);
+app.post('/createTodo', authenticateToken, todoController.createTodo);
 
-app.post('/login', loginUser);
+app.patch('/todos/:id', authenticateToken, todoController.updateTodo)
+
+app.delete('/delete/:id', authenticateToken, todoController.deleteTodo)
+
+app.post('/register',userCotroller. registerUser);
+
+app.post('/login', userCotroller.loginUser);
 
 if(connectDb()) {
     app.listen(8080, () => {
